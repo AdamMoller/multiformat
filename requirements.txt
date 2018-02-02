@@ -1,3 +1,2 @@
 reportlab
 Pillow
-pytest
