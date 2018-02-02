@@ -1,4 +1,6 @@
 # Multiformat
+[![Build Status](https://travis-ci.org/AdamMoller/multiformat.svg?branch=master)](https://travis-ci.org/AdamMoller/multiformat)
+
 Generate documents in multiple formats using a single class.
 
 ## About
