@@ -1,5 +1,6 @@
 # Multiformat
 [![Build Status](https://travis-ci.org/AdamMoller/multiformat.svg?branch=master)](https://travis-ci.org/AdamMoller/multiformat)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 Generate documents in multiple formats using a single class.
 
