@@ -308,7 +308,7 @@ class Document:
         # document plane.
         try:
             w = int(w)
-            x2 = int(w + x)
+            x2 = w + int(x)
         except:
             _error("Invalid width: {}, Width should be integer.".format(w))
         if x2 >= 0 and x2 <= self.w:
@@ -321,8 +321,8 @@ class Document:
         # Confirm height is an integer and element doesn't extend outside
         # document plane.
         try:
-            y = int(y)
-            y2 = int(h + y)
+            h = int(h)
+            y2 = h + int(y)
         except:
             _error("Invalid width: {}, Width should be integer.".format(h))
         if y2 >= 0 and y2 <= self.h:
