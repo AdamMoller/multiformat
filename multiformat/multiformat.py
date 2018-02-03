@@ -36,10 +36,11 @@ class Document:
         """
         self.document_size = document_size.lower()
         if self.document_size not in ["a4", "letter"]:
-            _error("Invalid document size: '{}'".format(document_size))
+            _error("Invalid document size: '{}'".format(document_size),
+                   "KeyError")
         self.layout = layout.lower()
         if self.layout not in ["landscape", "portrait"]:
-            _error("Invalid document layout: '{}'".format(layout))
+            _error("Invalid document layout: '{}'".format(layout), "KeyError")
         page_dimensions = {
             'a4': {
                 'landscape': {
