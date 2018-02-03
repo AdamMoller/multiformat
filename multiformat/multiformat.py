@@ -344,8 +344,7 @@ class Document:
             _error("Invalid alignment.")
 
     def _validate_font(self, font):
-        # Confirm width is an integer and element doesn't extend outside
-        # document plane.
+        # Confirm font name is valid.
         try:
             font = str(font)
         except:
