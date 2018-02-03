@@ -267,6 +267,17 @@ def test_validate_font(font, return_font):
     assert document._validate_font(font) == return_font
 
 
+@pytest.mark.parametrize("font", [
+    ("Unknown-Font"),
+    (-1),
+    (None),
+])
+def test_validate_font_error(font):
+    document = Document("letter", "portrait")
+    with pytest.raises(RuntimeError):
+        document._validate_font(font)
+
+
 @pytest.mark.parametrize("size", [
     ("10"),
     (20),
@@ -295,9 +306,9 @@ def test_validate_color(color):
 
 
 @pytest.mark.parametrize("color", [
-    ((10, 10, "a")),
-    (("100", "100", "b")),
-    (("100", "100", None)),
+    (("a", 10, 10)),
+    (("100", "b", "100")),
+    (("100", None, "100")),
     (("100", "100", -1)),
     (("100", "100", "-1")),
 ])
