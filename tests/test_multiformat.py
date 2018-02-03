@@ -1,7 +1,6 @@
 import pytest
 
 from multiformat.multiformat import Document
-from PIL import Image, ImageFont, ImageDraw
 
 
 def test_dimensions():
