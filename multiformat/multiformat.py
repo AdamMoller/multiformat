@@ -335,10 +335,7 @@ class Document:
     def _validate_alignment(self, alignment):
         # Confirm alignement is string and left, right, or middle.
         valid_alignments = ["left", "right", "middle"]
-        try:
-            alignment = str(alignment).lower()
-        except:
-            _error("Invalid alignment.")
+        alignment = str(alignment).lower()
         if alignment in valid_alignments:
             return alignment.lower()
         else:
@@ -346,10 +343,7 @@ class Document:
 
     def _validate_font(self, font):
         # Confirm font name is valid.
-        try:
-            font = str(font)
-        except:
-            _error("Font name ({}) not valid.".format(font))
+        font = str(font)
         try:
             index = [x.lower() for x in self.supported_fonts].index(
                 font.lower())
@@ -372,10 +366,7 @@ class Document:
 
     def _validate_string(self, string):
         # Confirm strings are strings.
-        try:
-            return str(string)
-        except:
-            _error("Invalid string.")
+        return str(string)
 
     def _validate_color(self, color):
         # Confirm RGB colors are tuples of 3 integers 0 to 255.
