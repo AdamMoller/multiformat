@@ -207,123 +207,123 @@ class TestMarkers:
         }
 
 
-def test_generate_unsupported_image():
-    document = Document("letter", "portrait")
-    with pytest.raises(RuntimeError):
-        document.generate_image("test_image", "tiff", size=(500, 500))
+class TestGenerators:
+    def new_populated_document(self):
+        document = Document("letter", "portrait")
+        document.draw_rectangle(0, 0, 200, 200, (0, 0, 0), (0, 0, 0), 1)
+        return document
+
+    def test_generate_unsupported_image(self):
+        document = self.new_populated_document()
+        with pytest.raises(RuntimeError):
+            document.generate_image("test_image", "tiff", size=(500, 500))
 
 
-@pytest.mark.parametrize("x", [
-    ("100"),
-    (200),
-])
-def test_validate_x_var(x):
-    document = Document("letter", "portrait")
-    assert document._validate_x_var(x) == int(x)
+class TestValidators:
+    def new_document(self):
+        return Document("A4", "portrait")
 
+    @pytest.mark.parametrize("x", [
+        ("100"),
+        (200),
+    ])
+    def test_validate_x_var(self, x):
+        document = self.new_document()
+        assert document._validate_x_var(x) == int(x)
 
-@pytest.mark.parametrize("y", [
-    ("100"),
-    (200),
-])
-def test_validate_y_var(y):
-    document = Document("letter", "portrait")
-    assert document._validate_y_var(y) == int(y)
+    @pytest.mark.parametrize("y", [
+        ("100"),
+        (200),
+    ])
+    def test_validate_y_var(self, y):
+        document = self.new_document()
+        assert document._validate_y_var(y) == int(y)
 
+    @pytest.mark.parametrize("x,w", [
+        ("100", "400"),
+        (200, 400),
+    ])
+    def test_validate_w_var(self, x, w):
+        document = self.new_document()
+        assert document._validate_w_var(x, w) == int(w)
 
-@pytest.mark.parametrize("x,w", [
-    ("100", "400"),
-    (200, 400),
-])
-def test_validate_w_var(x, w):
-    document = Document("letter", "portrait")
-    assert document._validate_w_var(x, w) == int(w)
+    @pytest.mark.parametrize("y,h", [
+        ("100", "400"),
+        (200, 400),
+    ])
+    def test_validate_h_var(self, y, h):
+        document = self.new_document()
+        assert document._validate_h_var(y, h) == int(h)
 
+    @pytest.mark.parametrize("param, return_value", [
+        ("left", "left"),
+        ("right", "right"),
+        ("middle", "middle"),
+        ("Left", "left"),
+        ("Right", "right"),
+        ("Middle", "middle"),
+        ("LEFT", "left"),
+        ("RIGHT", "right"),
+        ("MIDDLE", "middle"),
+    ])
+    def test_validate_alignment(self, param, return_value):
+        document = self.new_document()
+        assert document._validate_alignment(param) == return_value
 
-@pytest.mark.parametrize("y,h", [
-    ("100", "400"),
-    (200, 400),
-])
-def test_validate_h_var(y, h):
-    document = Document("letter", "portrait")
-    assert document._validate_h_var(y, h) == int(h)
+    @pytest.mark.parametrize("font,return_font", [
+        ("OpenSans-Regular", "OpenSans-Regular"),
+        ("OpenSans-Bold", "OpenSans-Bold"),
+        ("opensans-regular", "OpenSans-Regular"),
+        ("opensans-bold", "OpenSans-Bold"),
+        ("OPENSANS-REGULAR", "OpenSans-Regular"),
+        ("OPENSANS-BOLD", "OpenSans-Bold"),
+    ])
+    def test_validate_font(self, font, return_font):
+        document = self.new_document()
+        assert document._validate_font(font) == return_font
 
+    @pytest.mark.parametrize("font", [
+        ("Unknown-Font"),
+        (-1),
+        (None),
+    ])
+    def test_validate_font_error(self, font):
+        document = self.new_document()
+        with pytest.raises(RuntimeError):
+            document._validate_font(font)
 
-@pytest.mark.parametrize("param, return_value", [
-    ("left", "left"),
-    ("right", "right"),
-    ("middle", "middle"),
-    ("Left", "left"),
-    ("Right", "right"),
-    ("Middle", "middle"),
-    ("LEFT", "left"),
-    ("RIGHT", "right"),
-    ("MIDDLE", "middle"),
-])
-def test_validate_alignment(param, return_value):
-    document = Document("letter", "portrait")
-    assert document._validate_alignment(param) == return_value
+    @pytest.mark.parametrize("size", [
+        ("10"),
+        (20),
+    ])
+    def test_validate_size(self, size):
+        document = self.new_document()
+        assert document._validate_size(size) == int(size)
 
+    @pytest.mark.parametrize("string", [
+        ("test string"),
+    ])
+    def test_validate_string(self, string):
+        document = self.new_document()
+        assert document._validate_string(string) == string
 
-@pytest.mark.parametrize("font,return_font", [
-    ("OpenSans-Regular", "OpenSans-Regular"),
-    ("OpenSans-Bold", "OpenSans-Bold"),
-    ("opensans-regular", "OpenSans-Regular"),
-    ("opensans-bold", "OpenSans-Bold"),
-    ("OPENSANS-REGULAR", "OpenSans-Regular"),
-    ("OPENSANS-BOLD", "OpenSans-Bold"),
-])
-def test_validate_font(font, return_font):
-    document = Document("letter", "portrait")
-    assert document._validate_font(font) == return_font
+    @pytest.mark.parametrize("color", [
+        ((10, 10, 10)),
+        (("100", "100", "100")),
+    ])
+    def test_validate_color(self, color):
+        document = self.new_document()
+        assert document._validate_color(color) == (int(color[0]), int(
+            color[1]), int(color[2]))
 
-
-@pytest.mark.parametrize("font", [
-    ("Unknown-Font"),
-    (-1),
-    (None),
-])
-def test_validate_font_error(font):
-    document = Document("letter", "portrait")
-    with pytest.raises(RuntimeError):
-        document._validate_font(font)
-
-
-@pytest.mark.parametrize("size", [
-    ("10"),
-    (20),
-])
-def test_validate_size(size):
-    document = Document("letter", "portrait")
-    assert document._validate_size(size) == int(size)
-
-
-@pytest.mark.parametrize("string", [
-    ("test string"),
-])
-def test_validate_string(string):
-    document = Document("letter", "portrait")
-    assert document._validate_string(string) == string
-
-
-@pytest.mark.parametrize("color", [
-    ((10, 10, 10)),
-    (("100", "100", "100")),
-])
-def test_validate_color(color):
-    document = Document("letter", "portrait")
-    assert document._validate_color(color) == (int(color[0]), int(color[1]),
-                                               int(color[2]))
-
-
-@pytest.mark.parametrize("color", [
-    (("a", 10, 10)),
-    (("100", "b", "100")),
-    (("100", None, "100")),
-    (("100", "100", -1)),
-    (("100", "100", "-1")),
-])
-def test_validate_color_error(color):
-    document = Document("letter", "portrait")
-    with pytest.raises(RuntimeError):
-        document._validate_color(color)
+    @pytest.mark.parametrize("color", [
+        (("a", 10, 10)),
+        (("100", "b", "100")),
+        (("100", None, "100")),
+        (("100", "100", -1)),
+        (("100", "300", "-1")),
+    ])
+    def test_validate_color_error(self, color):
+        document = self.new_document()
+        with pytest.raises(RuntimeError):
+            document._validate_color(color)
