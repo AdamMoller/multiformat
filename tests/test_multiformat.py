@@ -209,10 +209,12 @@ class TestMarkers:
 
 
 class TestGenerators:
-    def new_populated_document(self):
-        document = Document("letter", "portrait")
-        document.draw_rectangle(0, 0, document.w, document.h, (29, 179, 97),
-                                (0, 0, 0), 0)
+    def new_populated_document(self, size="letter"):
+        document = Document(size, "portrait")
+        document.draw_rectangle(0, 0, document.w, document.h, None, (0, 0, 0),
+                                10)
+        document.draw_rectangle(0, 0, document.w, document.h, (0, 0, 0), None,
+                                0)
         document.draw_string("Hello World", 100, document.h - 100, "left",
                              "OpenSans-Bold", 100, (255, 255, 255))
         document.draw_string("Hello World", 100, document.h - 100, "middle",
@@ -222,7 +224,7 @@ class TestGenerators:
         document.draw_line(0, 0, document.w, document.h, 50, (251, 176, 64))
         document.insert_page_break()
         document.draw_rectangle(0, 0, document.w, document.h, (29, 179, 97),
-                                (0, 0, 0), 0)
+                                (0, 0, 0), 10)
         document.draw_string("Hello World", 100, document.h - 100, "left",
                              "OpenSans-Bold", 100, (255, 255, 255))
         document.draw_line(0, 0, document.w, document.h, 50, (251, 176, 64))
@@ -231,7 +233,7 @@ class TestGenerators:
     def test_generate_image_unsupported(self):
         document = self.new_populated_document()
         with pytest.raises(RuntimeError):
-            document.generate_image("test_image", "tiff", size=(500, 500))
+            document.generate_image("image_test", "tiff", size=(500, 500))
 
     @pytest.mark.parametrize("image_format,size", [
         ("PNG", None),
@@ -246,7 +248,18 @@ class TestGenerators:
         document = self.new_populated_document()
         f = BytesIO()
         document.generate_image(
-            "test_image", image_format, file_object=f, size=size)
+            "image_test", image_format, file_object=f, size=size)
+
+    def test_generate_pdf(self):
+        document = self.new_populated_document()
+        document.author = "Person Name"
+        document.title = "The Title"
+        document.subject = "The Subject"
+        f = BytesIO()
+        document.generate_pdf("pdf_test", file_object=f)
+        document = self.new_populated_document("a4")
+        f = BytesIO()
+        document.generate_pdf("pdf_test", file_object=f)
 
 
 class TestValidators:
