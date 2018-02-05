@@ -210,13 +210,37 @@ class TestMarkers:
 class TestGenerators:
     def new_populated_document(self):
         document = Document("letter", "portrait")
-        document.draw_rectangle(0, 0, 200, 200, (0, 0, 0), (0, 0, 0), 1)
+        document.draw_rectangle(0, 0, document.w, document.h, (29, 179, 97),
+                                (0, 0, 0), 0)
+        document.draw_string("Hello World", 100, document.h - 100, "left",
+                             "OpenSans-Bold", 100, (255, 255, 255))
+        document.draw_line(0, 0, document.w, document.h, 50, (251, 176, 64))
+        document.insert_page_break()
+        document.draw_rectangle(0, 0, document.w, document.h, (29, 179, 97),
+                                (0, 0, 0), 0)
+        document.draw_string("Hello World", 100, document.h - 100, "left",
+                             "OpenSans-Bold", 100, (255, 255, 255))
+        document.draw_line(0, 0, document.w, document.h, 50, (251, 176, 64))
         return document
 
-    def test_generate_unsupported_image(self):
+    def test_generate_image_unsupported(self):
         document = self.new_populated_document()
         with pytest.raises(RuntimeError):
             document.generate_image("test_image", "tiff", size=(500, 500))
+
+    @pytest.mark.parametrize("image_format,size", [
+        ("PNG", None),
+        ("JPEG", None),
+        ("GIF", None),
+        ("PNG", (500, 500)),
+        ("JPEG", (500, 500)),
+        ("GIF", (500, 500)),
+    ])
+    def test_generate_image_supported(self, image_format, size):
+        document = self.new_populated_document()
+        with open('test_filename', 'wb') as f:
+            document.generate_image(
+                "test_image", image_format, file_object=f, size=size)
 
 
 class TestValidators:
