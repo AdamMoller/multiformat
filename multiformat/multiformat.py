@@ -230,7 +230,11 @@ class Document:
                 pdf.new_page()
         pdf.save()
 
-    def generate_image(self, file_name, image_format, size=None):
+    def generate_image(self,
+                       file_name,
+                       image_format,
+                       size=None,
+                       file_object=None):
         """Generate the document as an image.
 
         Generate the document as an image based on the elements defined with other
@@ -272,6 +276,9 @@ class Document:
                                      item["border_color"],
                                      item["border_width"])
             elif item["type"] == "page_break":
+                # break if assigning to single file object
+                if file_object:
+                    break
                 image.save()
                 image_count = image_count + 1
                 if size:
@@ -280,7 +287,10 @@ class Document:
                 else:
                     image = _Image("file_name_{}".format(image_count),
                                    image_format, (self.w, self.h))
-        image.save()
+        if file_object:
+            image.save(file_object)
+        else:
+            image.save()
 
     def _validate_x_var(self, x):
         # Confirm x-coordinate is an integer and within document plane.
