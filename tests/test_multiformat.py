@@ -1,4 +1,5 @@
 import pytest
+from io import BytesIO
 from multiformat.multiformat import Document
 
 
@@ -214,6 +215,10 @@ class TestGenerators:
                                 (0, 0, 0), 0)
         document.draw_string("Hello World", 100, document.h - 100, "left",
                              "OpenSans-Bold", 100, (255, 255, 255))
+        document.draw_string("Hello World", 100, document.h - 100, "middle",
+                             "OpenSans-Bold", 100, (255, 255, 255))
+        document.draw_string("Hello World", 100, document.h - 100, "right",
+                             "OpenSans-Bold", 100, (255, 255, 255))
         document.draw_line(0, 0, document.w, document.h, 50, (251, 176, 64))
         document.insert_page_break()
         document.draw_rectangle(0, 0, document.w, document.h, (29, 179, 97),
@@ -232,15 +237,16 @@ class TestGenerators:
         ("PNG", None),
         ("JPEG", None),
         ("GIF", None),
-        ("PNG", (500, 500)),
-        ("JPEG", (500, 500)),
-        ("GIF", (500, 500)),
+        ("PNG", (100, 2000)),
+        ("JPEG", (2000, 100)),
+        ("GIF", (2160, 3000)),
+        ("PNG", (3000, 2999)),
     ])
     def test_generate_image_supported(self, image_format, size):
         document = self.new_populated_document()
-        with open('test_filename', 'wb') as f:
-            document.generate_image(
-                "test_image", image_format, file_object=f, size=size)
+        f = BytesIO()
+        document.generate_image(
+            "test_image", image_format, file_object=f, size=size)
 
 
 class TestValidators:
