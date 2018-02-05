@@ -300,16 +300,9 @@ class Document:
                     break
                 image.save()
                 image_count = image_count + 1
-                if size:
-                    image = _Image("file_name_{}".format(image_count),
-                                   image_format, (self.w, self.h), size)
-                else:
-                    image = _Image("file_name_{}".format(image_count),
-                                   image_format, (self.w, self.h))
-        if file_object:
-            image.save(file_object)
-        else:
-            image.save()
+                image = _Image("file_name_{}".format(image_count),
+                               image_format, (self.w, self.h), size)
+        image.save(file_object)
 
     def _validate_x_var(self, x):
         # Confirm x-coordinate is an integer and within document plane.
