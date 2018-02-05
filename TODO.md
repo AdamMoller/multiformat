@@ -13,3 +13,4 @@ Planned development for multiformat
 - Add page option to Document.generate_image()
 - Add method to define the metadata for a PDF
 - No fill rectangles
+- Validate file_object parameters on generate methods
