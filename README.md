@@ -111,16 +111,22 @@ Add a page break to the document. When the document is generated as an image eac
 generate_image(file_name, image_format, size)
 ```
 Generate the document as an image based on the elements defined with other methods. Will create PNG, GIF, or JPEG images.
+
+Image will be saved to the current directory if a file-like object is not assigned to the file_object parameter.
 - file_name: name of the image file, without extension. (String)
 - image_format: GIF, JPEG, PNG (String)
 - size: Width and height of image in pixels (Integer, Integer)
+- file_object: optional file-like object to write to
 
 #### Generate PDF
 ``` python
 generate_pdf(file_name)
 ```
 Generate the document as a PDF based on the elements defined with other methods.
+
+PDF will be saved to the current directory if a file-like object is not assigned to the file_object parameter.
 - file_name: name of the pdf file, without extension. (String)
+- file_object: optional file-like object to write to
 
 ## Fonts
 Multiformat supports TrueType fonts (TTF). The following open source fonts are included in the package:
