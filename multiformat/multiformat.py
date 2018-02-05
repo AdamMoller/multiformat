@@ -70,12 +70,20 @@ class Document:
             if file.endswith(".ttf"):
                 self.supported_fonts.append(os.path.splitext(file)[0])
         # Define document width and height based on page size and layout
-        self.w = page_dimensions[self.document_size][self.layout]["w"]
-        self.h = page_dimensions[self.document_size][self.layout]["h"]
+        self._w = page_dimensions[self.document_size][self.layout]["w"]
+        self._h = page_dimensions[self.document_size][self.layout]["h"]
         self.author = None
         self.title = None
         self.subject = None
         self._document = []
+
+    @property
+    def w(self):
+        return self._w
+
+    @property
+    def h(self):
+        return self._h
 
     def draw_string(self, string, x, y, alignment, font, size, color):
         """Add a string to the document.
