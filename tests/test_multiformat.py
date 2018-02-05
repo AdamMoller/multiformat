@@ -98,6 +98,8 @@ class TestDrawing:
     @pytest.mark.parametrize(
         "x,y,w,h,fill_color,border_color,border_width",
         [
+            # blank rectangle
+            (-1, 0, 200, 200, None, (0, 0, 0), 0),
             # x
             (-1, 0, 200, 200, (0, 0, 0), (0, 0, 0), 1),
             (5000, 0, 200, 200, (0, 0, 0), (0, 0, 0), 1),
