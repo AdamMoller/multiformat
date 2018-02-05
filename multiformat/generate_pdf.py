@@ -93,8 +93,6 @@ class _PDF:
         y = (y / 100) * cm
         w = (w / 100) * cm
         h = (h / 100) * cm
-        self.pdf.setFillColorRGB(fill_color[0] / 255, fill_color[1] / 255,
-                                 fill_color[2] / 255)
         if border_width > 0:
             self.pdf.setStrokeColorRGB(border_color[0] / 255,
                                        border_color[1] / 255,
@@ -104,9 +102,11 @@ class _PDF:
             self.pdf.setStrokeColorRGB(
                 fill_color[0] / 255, fill_color[1] / 255, fill_color[2] / 255)
             self.pdf.setLineWidth(0)
-        if fill_color is None:
+        if not fill_color:
             self.pdf.rect(x, y, w, h, fill=0)
         else:
+            self.pdf.setFillColorRGB(fill_color[0] / 255, fill_color[1] / 255,
+                                     fill_color[2] / 255)
             self.pdf.rect(x, y, w, h, fill=1)
 
     def save(self):
