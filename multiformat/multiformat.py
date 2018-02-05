@@ -164,6 +164,14 @@ class Document:
         Returns:
             None
         """
+        valid_border_width = self._validate_size(border_width)
+        if fill_color is None and (valid_border_width <= 0
+                                   or border_color is None):
+            _error("Rectangle requires border or fill")
+        valid_border_color = None
+        if valid_border_width > 0:
+            valid_border_color = self._validate_color(border_color)
+
         self._document.append({
             "type":
             "rectangle",
@@ -176,11 +184,11 @@ class Document:
             "h":
             self._validate_h_var(y, h),
             "fill_color":
-            self._validate_color(fill_color),
+            self._validate_color(fill_color, required=False),
             "border_color":
-            self._validate_color(border_color),
+            valid_border_color,
             "border_width":
-            self._validate_size(border_width),
+            valid_border_width,
         })
 
     def insert_page_break(self):
@@ -389,8 +397,10 @@ class Document:
         # Confirm strings are strings.
         return str(string)
 
-    def _validate_color(self, color):
+    def _validate_color(self, color, required=True):
         # Confirm RGB colors are tuples of 3 integers 0 to 255.
+        if not color and required is False:
+            return None
         try:
             r = int(color[0])
             g = int(color[1])
