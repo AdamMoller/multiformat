@@ -199,19 +199,26 @@ class Document:
             "type": "page_break",
         })
 
-    def generate_pdf(self, file_name):
+    def generate_pdf(self, file_name, file_object=None):
         """Generate the document as a PDF.
 
         Generate the document as a PDF based on the elements defined with other
         methods.
 
+        PDF will be saved to the current directory if a file-like object is
+        not assigned to the file_object parameter.
+
         Args:
             file_name: name of the pdf file, without extension. (String)
-
+            file_object: optional file-like object to write to
         Returns:
             None
         """
-        pdf = _PDF(file_name, self.document_size, self.layout)
+        pdf = _PDF(
+            file_name,
+            self.document_size,
+            self.layout,
+            file_object=file_object)
         pdf.set_metadata(
             author=self.author, title=self.title, subject=self.subject)
         for item in self._document:
@@ -237,13 +244,17 @@ class Document:
                        file_object=None):
         """Generate the document as an image.
 
-        Generate the document as an image based on the elements defined with other
-        methods. Will create PNG, GIF, or JPEG images.
+        Generate the document as an image based on the elements defined with
+        other methods. Will create PNG, GIF, or JPEG images.
+
+        Image will be saved to the current directory if a file-like object is
+        not assigned to the file_object parameter.
 
         Args:
             file_name: name of the image file, without extension. (String)
             image_format: GIF, JPEG, PNG (String)
             size: Width and height of image in pixels (Integer, Integer)
+            file_object: optional file-like object to write to
 
         Returns:
             None
