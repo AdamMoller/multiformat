@@ -108,10 +108,13 @@ class _Image:
         self.draw.line(
             [(x3, y3), (x, y)], fill=border_color, width=border_width)
 
-    def save(self):
+    def save(self, file_object=None):
         # Save the image to a file
         if self.output_dimensions:
             self.image = self.image.resize(
                 self.output_dimensions, resample=ImagePIL.ANTIALIAS)
-        self.image.save("{}.{}".format(self.file_name, self.image_format),
-                        self.image_format)
+        if file_object:
+            self.image.save(fp=file_object, format=self.image_format)
+        else:
+            self.image.save("{}.{}".format(self.file_name, self.image_format),
+                            self.image_format)

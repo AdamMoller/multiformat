@@ -22,13 +22,20 @@ from reportlab.pdfbase.ttfonts import TTFont
 
 class _PDF:
     # Generate a PDF with the reportlab open source toolkit.
-    def __init__(self, file_name, document_size, orientation):
+    def __init__(self, file_name, document_size, orientation,
+                 file_object=None):
         if document_size == "letter":
             standard_doc_size = letter
         elif document_size == "a4":
             standard_doc_size = A4
-        self.pdf = canvas.Canvas(
-            "{}.pdf".format(file_name), pagesize=standard_doc_size, bottomup=0)
+        if file_object:
+            self.pdf = canvas.Canvas(
+                file_object, pagesize=standard_doc_size, bottomup=0)
+        else:
+            self.pdf = canvas.Canvas(
+                "{}.pdf".format(file_name),
+                pagesize=standard_doc_size,
+                bottomup=0)
         self.loaded_fonts = [
             "Courier",
             "Courier-Bold",
