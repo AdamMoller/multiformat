@@ -237,11 +237,15 @@ class TestGenerators:
         with pytest.raises(RuntimeError):
             document.generate_image("image_test", "tiff", size=(500, 500))
 
-    def test_generate_image_invalid_page(self):
+    @pytest.mark.parametrize("page", [
+        ("A"),
+        (10),
+    ])
+    def test_generate_image_invalid_page(self, page):
         document = self.new_populated_document()
         with pytest.raises(RuntimeError):
             document.generate_image(
-                "image_test", "tiff", size=(500, 500), page=10)
+                "image_test", "png", size=(500, 500), page=page)
 
     @pytest.mark.parametrize("image_format,size,page", [
         ("PNG", None, None),
