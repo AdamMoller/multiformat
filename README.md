@@ -21,36 +21,41 @@ When dynamically generating PDF documents, thumbnail or preview images are somet
 
 ### Example
 ``` python
-    from multiformat.multiformat import Document
+from multiformat.multiformat import Document
 
-    # Create a new document
-    document = Document(document_size='A4', layout='portrait')
-    # Add a green background
-    document.draw_rectangle(
-        x=0,
-        y=0,
-        w=document.w,
-        h=document.h,
-        fill_color=(29, 179, 97),
-        border_color=(0, 0, 0),
-        border_width=0)
-    # Add "Hello World" to the bottom left.
-    document.draw_string(
-        string="Hello World",
-        x=100,
-        y=document.h - 100,
-        alignment="left",
-        font="OpenSans-Bold",
-        size=100,
-        color=(255, 255, 255))
-    # Add an orange line from the top-left to the bottom-right
-    document.draw_line(
-        x=0, y=0, x1=document.w, y1=document.h, width=50, color=(251, 176, 64))
-    # Generate the document as a PDF
-    document.generate_pdf(file_name="example")
-    # Generate the document as a PNG no larger than 1000,1000
-    document.generate_image(
-        file_name="example", image_format="PNG", size=(1000, 1000))
+# Create a new document
+document = Document(document_size='A4', layout='portrait')
+# Add a green background
+document.draw_rectangle(
+    x=0,
+    y=0,
+    w=document.w,
+    h=document.h,
+    fill_color=(29, 179, 97),
+    border_color=(0, 0, 0),
+    border_width=0)
+# Add "Hello World" to the bottom left.
+document.draw_string(
+    string="Hello World",
+    x=100,
+    y=document.h - 100,
+    alignment="left",
+    font="OpenSans-Bold",
+    size=100,
+    color=(255, 255, 255))
+# Add an orange line from the top-left to the bottom-right
+document.draw_line(
+    x=0, y=0, x1=document.w, y1=document.h, width=50, color=(251, 176, 64))
+# Insert page break
+document.insert_page_break()
+# Add an orange line from the top-right to the bottom-left
+document.draw_line(
+    x=document.w, y=0, x1=0, y1=document.h, width=50, color=(251, 176, 64))
+# Generate the document as a PDF
+document.generate_pdf(file_name="example")
+# Generate page 1 of the document as a PNG no larger than 1000,1000
+document.generate_image(
+    file_name="example", image_format="PNG", size=(1000, 1000), page=1)
 ```
 ### New Document
 ``` python
@@ -108,7 +113,7 @@ Add a page break to the document. When the document is generated as an image eac
 
 #### Generate Image
 ``` python
-generate_image(file_name, image_format, size)
+generate_image(file_name, image_format, size, page, file_object)
 ```
 Generate the document as an image based on the elements defined with other methods. Will create PNG, GIF, or JPEG images.
 
@@ -116,6 +121,7 @@ Image will be saved to the current directory if a file-like object is not assign
 - file_name: name of the image file, without extension. (String)
 - image_format: GIF, JPEG, PNG (String)
 - size: Width and height of image in pixels (Integer, Integer)
+- page: Page to generate on multiple page documents
 - file_object: optional file-like object to write to
 
 #### Generate PDF

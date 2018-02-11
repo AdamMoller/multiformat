@@ -76,6 +76,11 @@ class Document:
         self.title = None
         self.subject = None
         self._document = []
+        self._pages = 1
+
+    @property
+    def pages(self):
+        return self._pages
 
     @property
     def w(self):
@@ -211,6 +216,7 @@ class Document:
         Returns:
             None
         """
+        self._pages += 1
         self._document.append({
             "type": "page_break",
         })
@@ -257,6 +263,7 @@ class Document:
                        file_name,
                        image_format,
                        size=None,
+                       page=None,
                        file_object=None):
         """Generate the document as an image.
 
@@ -270,6 +277,7 @@ class Document:
             file_name: name of the image file, without extension. (String)
             image_format: GIF, JPEG, PNG (String)
             size: Width and height of image in pixels (Integer, Integer)
+            page: Page to generate on multiple page documents
             file_object: optional file-like object to write to
 
         Returns:
@@ -289,15 +297,26 @@ class Document:
             image = _Image(file_name, image_format, (self.w, self.h), size)
         else:
             image = _Image(file_name, image_format, (self.w, self.h))
+        # Only print selected page if page paramter defined.
+        print_page = True
+        if page:
+            page = self._validate_page_number(page, self.pages)
+        generated_page = 1
         for item in self._document:
-            if item["type"] == "string":
+            # Only print selected page if page paramter defined.
+            if page:
+                if generated_page == page:
+                    print_page = True
+                else:
+                    print_page = False
+            if item["type"] == "string" and print_page:
                 image.draw_string(item["string"], item["x"], item["y"],
                                   item["alignment"], item["font"],
                                   item["size"], item["color"])
-            elif item["type"] == "line":
+            elif item["type"] == "line" and print_page:
                 image.draw_line(item["x"], item["y"], item["x1"], item["y1"],
                                 item["width"], item["color"])
-            elif item["type"] == "rectangle":
+            elif item["type"] == "rectangle" and print_page:
                 image.draw_rectangle(item["x"], item["y"], item["w"],
                                      item["h"], item["fill_color"],
                                      item["border_color"],
@@ -306,10 +325,12 @@ class Document:
                 # break if assigning to single file object
                 if file_object:
                     break
-                image.save()
-                image_count = image_count + 1
-                image = _Image("file_name_{}".format(image_count),
-                               image_format, (self.w, self.h), size)
+                if not page:
+                    image.save()
+                    image_count = image_count + 1
+                    image = _Image("{}_{}".format(file_name, image_count),
+                                   image_format, (self.w, self.h), size)
+                generated_page += 1
         image.save(file_object)
 
     def _validate_x_var(self, x):
@@ -393,6 +414,19 @@ class Document:
             return size
         else:
             _error("Invalid size. Size should be >= 0.")
+
+    def _validate_page_number(self, page, pages):
+        # Confirm size is an integer >= 0.
+        try:
+            page = int(page)
+        except:
+            _error("Invalid page number. Page number should be integer.")
+        if page > 0 and page <= pages:
+            return page
+        else:
+            _error(
+                "Invalid page number. Page number should within range of pages."
+            )
 
     def _validate_string(self, string):
         # Confirm strings are strings.
