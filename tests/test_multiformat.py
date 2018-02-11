@@ -237,20 +237,26 @@ class TestGenerators:
         with pytest.raises(RuntimeError):
             document.generate_image("image_test", "tiff", size=(500, 500))
 
-    @pytest.mark.parametrize("image_format,size", [
-        ("PNG", None),
-        ("JPEG", None),
-        ("GIF", None),
-        ("PNG", (100, 2000)),
-        ("JPEG", (2000, 100)),
-        ("GIF", (2160, 3000)),
-        ("PNG", (3000, 2999)),
+    def test_generate_image_invalid_page(self):
+        document = self.new_populated_document()
+        with pytest.raises(RuntimeError):
+            document.generate_image(
+                "image_test", "tiff", size=(500, 500), page=10)
+
+    @pytest.mark.parametrize("image_format,size,page", [
+        ("PNG", None, None),
+        ("JPEG", None, 1),
+        ("GIF", None, 1),
+        ("PNG", (100, 2000), 1),
+        ("JPEG", (2000, 100), 2),
+        ("GIF", (2160, 3000), 2),
+        ("PNG", (3000, 2999), 2),
     ])
-    def test_generate_image_supported(self, image_format, size):
+    def test_generate_image_supported(self, image_format, size, page):
         document = self.new_populated_document()
         f = BytesIO()
         document.generate_image(
-            "image_test", image_format, file_object=f, size=size)
+            "image_test", image_format, size=size, page=page, file_object=f)
 
     def test_generate_pdf(self):
         document = self.new_populated_document()
