@@ -23,8 +23,13 @@ document.draw_string(
 # Add an orange line from the top-left to the bottom-right
 document.draw_line(
     x=0, y=0, x1=document.w, y1=document.h, width=50, color=(251, 176, 64))
+# Insert page break
+document.insert_page_break()
+# Add an orange line from the top-right to the bottom-left
+document.draw_line(
+    x=document.w, y=0, x1=0, y1=document.h, width=50, color=(251, 176, 64))
 # Generate the document as a PDF
 document.generate_pdf(file_name="example")
-# Generate the document as a PNG no larger than 1000,1000
+# Generate page 1 of the document as a PNG no larger than 1000,1000
 document.generate_image(
-    file_name="example", image_format="PNG", size=(1000, 1000))
+    file_name="example", image_format="PNG", size=(1000, 1000), page=1)
