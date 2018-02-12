@@ -1,5 +1,6 @@
 import pytest
 from io import BytesIO
+from filecmp import cmp
 from multiformat.multiformat import Document
 
 
@@ -284,6 +285,15 @@ class TestGenerators:
         document = self.new_populated_document("a4")
         f = BytesIO()
         document.generate_pdf("pdf_test", file_object=f)
+
+    def test_generated_image_file(self, tmpdir):
+        document = self.new_populated_document()
+        image_path = tmpdir.join("image_generation_test")
+        image_path_1 = tmpdir.join("image_generation_test.png")
+        image_path_2 = tmpdir.join("image_generation_test_2.png")
+        document.generate_image(image_path, "PNG", size=(1000, 1000))
+        assert cmp("tests/image_generation_test_control.png", image_path_1)
+        assert cmp("tests/image_generation_test_control_2.png", image_path_2)
 
 
 class TestValidators:
