@@ -1,5 +1,6 @@
 import pytest
 from io import BytesIO
+from filecmp import cmp
 from multiformat.multiformat import Document
 
 
@@ -213,23 +214,35 @@ class TestMarkers:
 class TestGenerators:
     def new_populated_document(self, size="letter"):
         document = Document(size, "portrait")
-        document.draw_rectangle(0, 0, document.w, document.h, None, (0, 0, 0),
-                                10)
-        document.draw_rectangle(0, 0, document.w, document.h, (0, 0, 0), None,
-                                0)
-        document.draw_string("Hello World", 100, document.h - 100, "left",
-                             "OpenSans-Bold", 100, (255, 255, 255))
-        document.draw_string("Hello World", 100, document.h - 100, "middle",
-                             "OpenSans-Bold", 100, (255, 255, 255))
-        document.draw_string("Hello World", 100, document.h - 100, "right",
-                             "OpenSans-Bold", 100, (255, 255, 255))
-        document.draw_line(0, 0, document.w, document.h, 50, (251, 176, 64))
+        document.draw_rectangle(100, 100, 400, 400, None, (50, 99, 154), 40)
+        document.draw_rectangle(700, 100, 200, 400, (24, 28, 31), None, 0)
+        document.draw_line(document.w / 2, 0, document.w / 2, document.h, 30,
+                           (224, 224, 224))
+        document.draw_string("Left Align", document.w / 2, 800, "left",
+                             "OpenSans-Bold", 100, (0, 0, 0))
+
+        document.draw_string("Center Align", document.w / 2, 1000, "middle",
+                             "OpenSans-Bold", 100, (0, 0, 0))
+
+        document.draw_string("Right Align", document.w / 2, 1200, "right",
+                             "OpenSans-Bold", 100, (0, 0, 0))
+        document.draw_string("Page 1", document.w - 50, document.h - 50,
+                             "right", "OpenSans-Regular", 100, (0, 0, 0))
         document.insert_page_break()
-        document.draw_rectangle(0, 0, document.w, document.h, (29, 179, 97),
-                                (0, 0, 0), 10)
-        document.draw_string("Hello World", 100, document.h - 100, "left",
-                             "OpenSans-Bold", 100, (255, 255, 255))
-        document.draw_line(0, 0, document.w, document.h, 50, (251, 176, 64))
+        document.draw_rectangle(100, 100, 400, 400, None, (50, 99, 154), 40)
+        document.draw_rectangle(700, 100, 200, 400, (24, 28, 31), None, 0)
+        document.draw_line(document.w / 2, 0, document.w / 2, document.h, 30,
+                           (224, 224, 224))
+        document.draw_string("Left Align", document.w / 2, 800, "left",
+                             "OpenSans-Bold", 100, (0, 0, 0))
+
+        document.draw_string("Center Align", document.w / 2, 1000, "middle",
+                             "OpenSans-Bold", 100, (0, 0, 0))
+
+        document.draw_string("Right Align", document.w / 2, 1200, "right",
+                             "OpenSans-Bold", 100, (0, 0, 0))
+        document.draw_string("Page 2", document.w - 50, document.h - 50,
+                             "right", "OpenSans-Regular", 100, (0, 0, 0))
         return document
 
     def test_generate_image_unsupported(self):
@@ -272,6 +285,20 @@ class TestGenerators:
         document = self.new_populated_document("a4")
         f = BytesIO()
         document.generate_pdf("pdf_test", file_object=f)
+
+    def test_generated_image_files(self, tmpdir):
+        document = self.new_populated_document()
+        image_path = tmpdir.join("image_generation_test")
+        image_path_1 = tmpdir.join("image_generation_test.png")
+        image_path_2 = tmpdir.join("image_generation_test_2.png")
+        document.generate_image(image_path, "PNG", size=(1000, 1000))
+        assert cmp("tests/image_generation_test_control.png", image_path_1)
+        assert cmp("tests/image_generation_test_control_2.png", image_path_2)
+
+    def test_generated_pdf_file(self, tmpdir):
+        document = self.new_populated_document()
+        pdf_path = tmpdir.join("pdf_generation_test")
+        document.generate_pdf(pdf_path)
 
 
 class TestValidators:

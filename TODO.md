@@ -10,5 +10,4 @@ Planned development for multiformat
 - Paths
 
 ## Additional Features
-- Add page option to Document.generate_image()
 - Validate file_object parameters on generate methods
