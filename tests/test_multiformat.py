@@ -286,7 +286,7 @@ class TestGenerators:
         f = BytesIO()
         document.generate_pdf("pdf_test", file_object=f)
 
-    def test_generated_image_file(self, tmpdir):
+    def test_generated_image_files(self, tmpdir):
         document = self.new_populated_document()
         image_path = tmpdir.join("image_generation_test")
         image_path_1 = tmpdir.join("image_generation_test.png")
@@ -294,6 +294,11 @@ class TestGenerators:
         document.generate_image(image_path, "PNG", size=(1000, 1000))
         assert cmp("tests/image_generation_test_control.png", image_path_1)
         assert cmp("tests/image_generation_test_control_2.png", image_path_2)
+
+    def test_generated_pdf_file(self, tmpdir):
+        document = self.new_populated_document()
+        pdf_path = tmpdir.join("pdf_generation_test")
+        document.generate_pdf(pdf_path)
 
 
 class TestValidators:
