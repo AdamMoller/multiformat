@@ -283,7 +283,7 @@ class Document:
         Returns:
             None
         """
-        image_count = 0
+        image_count = 1
         if image_format.lower() == "png":
             image_format = "png"
         elif image_format.lower() == "gif":
