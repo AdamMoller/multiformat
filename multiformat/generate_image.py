@@ -35,8 +35,8 @@ class _Image:
                 else:
                     output_w = image_wh[0]
                     output_h = int(document_wh[1] * scaleW)
-                    self.output_dimensions = (image_wh[0],
-                                              int(document_wh[1] * scaleW))
+                    self.output_dimensions = (image_wh[0], int(
+                        document_wh[1] * scaleW))
                     output_w = document_wh[0]
                     output_h = document_wh[1]
             else:
@@ -107,6 +107,40 @@ class _Image:
             [(x3a, y2), (x3b, y3)], fill=border_color, width=border_width)
         self.draw.line(
             [(x3, y3), (x, y)], fill=border_color, width=border_width)
+
+    def draw_circle(self, x, y, radius, fill_color, border_color,
+                    border_width):
+        # Draw a circle on the image with a center at (x,y).
+        x = int(x * self.scale)
+        y = int(y * self.scale)
+        radius = int(radius * self.scale)
+        border_width = int(border_width * self.scale)
+        x1 = x - radius
+        y1 = y - radius
+        x2 = x + radius
+        y2 = y + radius
+        half_border = int(border_width / 2)
+        # Draw circle fill if present
+        if fill_color:
+            self.draw.ellipse(
+                [(x1, y1), (x2, y2)], fill=fill_color, outline=fill_color)
+
+        # Draw circle border with mask
+        if border_color and border_width > 0:
+            box = (x1 - half_border, y1 - half_border, x2 + half_border,
+                   y2 + half_border)
+            mask_size = (box[2] - box[0], box[3] - box[1])
+            outside_border = (0, 0, mask_size[0], mask_size[1])
+
+            inside_border = (border_width, border_width,
+                             mask_size[0] - border_width,
+                             mask_size[1] - border_width)
+            mask = ImagePIL.new(size=mask_size, mode='L', color='black')
+            draw = ImageDraw.Draw(mask)
+            draw.ellipse(outside_border, fill='white', outline='white')
+            draw.ellipse(inside_border, fill='black', outline='black')
+            # Paste circle element on document
+            self.image.paste(border_color, box=box, mask=mask)
 
     def save(self, file_object=None):
         # Save the image to a file
