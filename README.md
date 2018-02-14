@@ -12,6 +12,7 @@ When dynamically generating PDF documents, thumbnail or preview images are somet
 - Strings
 - Lines
 - Rectangles
+- Circles
 - TrueType fonts
 - PDF metadata
 - PNG, GIF, JPEG image format
@@ -73,7 +74,7 @@ draw_line(x, y, x1, y1, width, color)
 ```
 Adds a line to the document defined by a start and end point.
 - x: x-axis start of the line. (Integer)
--  y: y-axis start of the line. (Integer)
+- y: y-axis start of the line. (Integer)
 - x1: x-axis end of the line. (Integer)
 - y1: y-axis end of the line (Integer)
 - width: Width of the line. (Integer)
@@ -111,7 +112,7 @@ draw_string(string, x, y, alignment, font, size, color)
 ```
 Adds a text string to the document that will be printed after all previous additions to the document.
 - string: String that will be drawn on the document
--  x: x-axis alignment point of the text. (Integer)
+- x: x-axis alignment point of the text. (Integer)
 - y: y-axis bottom of the text (Integer)
 - alignment: "left", "right", "middle" (String)
 - font: TTF file name without extension (String)
