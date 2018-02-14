@@ -301,6 +301,10 @@ class Document:
                 pdf.draw_rectangle(item["x"], item["y"], item["w"], item["h"],
                                    item["fill_color"], item["border_color"],
                                    item["border_width"])
+            elif item["type"] == "circle":
+                pdf.draw_circle(item["x"], item["y"], item["radius"],
+                                item["fill_color"], item["border_color"],
+                                item["border_width"])
             elif item["type"] == "page_break":
                 pdf.new_page()
         pdf.save()
@@ -367,6 +371,10 @@ class Document:
                                      item["h"], item["fill_color"],
                                      item["border_color"],
                                      item["border_width"])
+            elif item["type"] == "circle":
+                image.draw_circle(item["x"], item["y"], item["radius"],
+                                  item["fill_color"], item["border_color"],
+                                  item["border_width"])
             elif item["type"] == "page_break":
                 # break if assigning to single file object
                 if file_object:
