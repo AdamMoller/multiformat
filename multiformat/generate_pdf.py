@@ -109,6 +109,28 @@ class _PDF:
                                      fill_color[2] / 255)
             self.pdf.rect(x, y, w, h, fill=1)
 
+    def draw_circle(self, x, y, radius, fill_color, border_color,
+                    border_width):
+        # Draw a circle with the center at (x,y).
+        x = (x / 100) * cm
+        y = (y / 100) * cm
+        radius = (radius / 100) * cm
+        if border_width > 0:
+            self.pdf.setStrokeColorRGB(border_color[0] / 255,
+                                       border_color[1] / 255,
+                                       border_color[2] / 255)
+            self.pdf.setLineWidth((border_width / 100) * cm)
+        else:
+            self.pdf.setStrokeColorRGB(
+                fill_color[0] / 255, fill_color[1] / 255, fill_color[2] / 255)
+            self.pdf.setLineWidth(0)
+        if not fill_color:
+            self.pdf.circle(x_cen=x, y_cen=y, r=radius, stroke=1, fill=0)
+        else:
+            self.pdf.setFillColorRGB(fill_color[0] / 255, fill_color[1] / 255,
+                                     fill_color[2] / 255)
+            self.pdf.circle(x_cen=x, y_cen=y, r=radius, stroke=1, fill=1)
+
     def save(self):
         # Save the document to a file.
         self.pdf.save()

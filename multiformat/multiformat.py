@@ -172,7 +172,7 @@ class Document:
             h: Height of the rectangle. (Integer)
             fill_color: RGB color of the interior (Tuple)
             border_color: RGB color of the border (Tuple)
-            w: Width of the border. Set at 0 for no border (Integer)
+            border_width: Width of the border. Set at 0 for no border (Integer)
 
         Returns:
             None
@@ -196,6 +196,52 @@ class Document:
             self._validate_w_var(x, w),
             "h":
             self._validate_h_var(y, h),
+            "fill_color":
+            self._validate_color(fill_color, required=False),
+            "border_color":
+            valid_border_color,
+            "border_width":
+            valid_border_width,
+        })
+
+    def draw_circle(self,
+                    x,
+                    y,
+                    radius,
+                    fill_color=(0, 0, 0),
+                    border_color=(0, 0, 0),
+                    border_width=0):
+        """Add a circle to the document.
+
+        Add a circle to the document with fill and optional border.
+
+        Args:
+            x: x-axis center of the circle. (Integer)
+            y: y-axis center of the circle. (Integer)
+            radius: Radius of the circle. (Integer)
+            fill_color: RGB color of the interior (Tuple)
+            border_color: RGB color of the border (Tuple)
+            border_width: Width of the border. Set at 0 for no border (Integer)
+
+        Returns:
+            None
+        """
+        valid_border_width = self._validate_size(border_width)
+        if fill_color is None and (valid_border_width <= 0
+                                   or border_color is None):
+            _error("Circle requires border or fill")
+        valid_border_color = None
+        if valid_border_width > 0:
+            valid_border_color = self._validate_color(border_color)
+        self._document.append({
+            "type":
+            "circle",
+            "x":
+            self._validate_x_var(x),
+            "y":
+            self._validate_y_var(y),
+            "radius":
+            self._validate_positive_integer_var(radius),
             "fill_color":
             self._validate_color(fill_color, required=False),
             "border_color":
@@ -255,6 +301,10 @@ class Document:
                 pdf.draw_rectangle(item["x"], item["y"], item["w"], item["h"],
                                    item["fill_color"], item["border_color"],
                                    item["border_width"])
+            elif item["type"] == "circle":
+                pdf.draw_circle(item["x"], item["y"], item["radius"],
+                                item["fill_color"], item["border_color"],
+                                item["border_width"])
             elif item["type"] == "page_break":
                 pdf.new_page()
         pdf.save()
@@ -321,6 +371,10 @@ class Document:
                                      item["h"], item["fill_color"],
                                      item["border_color"],
                                      item["border_width"])
+            elif item["type"] == "circle":
+                image.draw_circle(item["x"], item["y"], item["radius"],
+                                  item["fill_color"], item["border_color"],
+                                  item["border_width"])
             elif item["type"] == "page_break":
                 # break if assigning to single file object
                 if file_object:
@@ -383,6 +437,17 @@ class Document:
             _error(
                 "Width variable not within document boundaries: {}".format(h))
 
+    def _validate_positive_integer_var(self, value):
+        # Confirm value is an integer.
+        try:
+            value = int(value)
+        except:
+            _error("Invalid: {}, Value should be integer.".format(value))
+        if value >= 0:
+            return value
+        else:
+            _error("Value should be >= zero: {}".format(value))
+
     def _validate_alignment(self, alignment):
         # Confirm alignement is string and left, right, or middle.
         valid_alignments = ["left", "right", "middle"]
@@ -396,8 +461,8 @@ class Document:
         # Confirm font name is valid.
         font = str(font)
         try:
-            index = [x.lower() for x in self.supported_fonts].index(
-                font.lower())
+            index = [x.lower()
+                     for x in self.supported_fonts].index(font.lower())
             return self.supported_fonts[index]
         except:
             _error(

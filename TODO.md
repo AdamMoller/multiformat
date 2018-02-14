@@ -2,7 +2,6 @@
 Planned development for multiformat
 
 ## More Document Elements
-- Circles
 - Rounded Rectangles
 - Images
 - Line Styles
