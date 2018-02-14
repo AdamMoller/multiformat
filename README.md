@@ -2,7 +2,6 @@
 [![codecov](https://codecov.io/gh/AdamMoller/multiformat/branch/master/graph/badge.svg)](https://codecov.io/gh/AdamMoller/multiformat)
 [![Build Status](https://travis-ci.org/AdamMoller/multiformat.svg?branch=master)](https://travis-ci.org/AdamMoller/multiformat)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![GitHub top language](https://img.shields.io/github/languages/top/badges/shields.svg)]()
 
 Generate documents in multiple formats using a single class.
 
