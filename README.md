@@ -2,6 +2,7 @@
 [![codecov](https://codecov.io/gh/AdamMoller/multiformat/branch/master/graph/badge.svg)](https://codecov.io/gh/AdamMoller/multiformat)
 [![Build Status](https://travis-ci.org/AdamMoller/multiformat.svg?branch=master)](https://travis-ci.org/AdamMoller/multiformat)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![GitHub top language](https://img.shields.io/github/languages/top/badges/shields.svg)]()
 
 Generate documents in multiple formats using a single class.
 
@@ -81,7 +82,7 @@ Adds a line to the document defined by a start and end point.
 
 #### Rectangle
 ``` python
-draw_rectangle(x, y, w, h, fill_color, border_color, border_width)
+draw_rectangle(x, y, w, h, fill_color=(0, 0, 0), border_color=(0, 0, 0), border_width=0)
 ```
 Add a rectangle to the document with fill and optional border.
 - x: x-axis top of the rectangle. (Integer)
@@ -90,7 +91,20 @@ Add a rectangle to the document with fill and optional border.
 - h: Height of the rectangle. (Integer)
 - fill_color: RGB color of the interior (Tuple)
 - border_color: RGB color of the border (Tuple)
-- w: Width of the border. Set at 0 for no border (Integer)
+- border_width: Width of the border. Set at 0 for no border (Integer)
+
+#### Circle
+``` python
+draw_circle(x, y, radius, fill_color=(0, 0, 0), border_color=(0, 0, 0), border_width=0)
+```
+Add a circle to the document with fill and optional border.
+- x: x-axis center of the circle. (Integer)
+- y: y-axis center of the circle. (Integer)
+- radius: Radius of the circle. (Integer)
+- fill_color: RGB color of the interior (Tuple)
+- border_color: RGB color of the border (Tuple)
+- border_width: Width of the border. Set at 0 for no border (Integer)
+
 
 #### String
 ``` python
@@ -113,7 +127,7 @@ Add a page break to the document. When the document is generated as an image eac
 
 #### Generate Image
 ``` python
-generate_image(file_name, image_format, size, page, file_object)
+generate_image(file_name, image_format, size=None, page=None, file_object=None)
 ```
 Generate the document as an image based on the elements defined with other methods. Will create PNG, GIF, or JPEG images.
 
@@ -126,7 +140,7 @@ Image will be saved to the current directory if a file-like object is not assign
 
 #### Generate PDF
 ``` python
-generate_pdf(file_name)
+generate_pdf(file_name, file_object=None)
 ```
 Generate the document as a PDF based on the elements defined with other methods.
 
@@ -139,7 +153,7 @@ Multiformat supports TrueType fonts (TTF). The following open source fonts are i
 - OpenSans-Bold
 - OpenSans-Regular
 
-Additional fonts can be added by placing the font's TTF file in the "fonts" directory of the multiformat package. The 14 standard PDF fonts will only work for creating PDF files. These fonts will need to be licensed and added to the fonts directory before creating images. The 14 fonts are:
+Additional fonts can be added by placing the font's TTF file in the "fonts" directory of the Multiformat package. The 14 standard PDF fonts will only work for creating PDF files. These fonts will need to be licensed and added to the fonts directory before creating images. The 14 fonts are:
 - Courier
 - Courier-Bold
 - Courier-BoldOblique
