@@ -270,6 +270,10 @@ class TestGenerators:
         document = Document(size, "portrait")
         document.draw_rectangle(100, 100, 400, 400, None, (50, 99, 154), 40)
         document.draw_rectangle(700, 100, 200, 400, (24, 28, 31), None, 0)
+        document.draw_circle(160, 800, 150, None, (138, 41, 0), 20)
+        document.draw_circle(160, 1200, 150, (172, 108, 19), None, 0)
+        document.draw_circle(160, 1600, 150, (13, 117, 75), (150, 153, 155),
+                             20)
         document.draw_line(document.w / 2, 0, document.w / 2, document.h, 30,
                            (224, 224, 224))
         document.draw_string("Left Align", document.w / 2, 800, "left",
