@@ -197,6 +197,60 @@ class TestDrawing:
         with pytest.raises(RuntimeError):
             document.draw_line(x, y, x1, y1, width, color)
 
+    def test_draw_circle(self):
+        document = self.new_document()
+        document.draw_circle(0, 0, 200, (0, 0, 0), (0, 0, 0), 1)
+        assert document._document[-1] == {
+            "type": "circle",
+            "x": 0,
+            "y": 0,
+            "radius": 200,
+            "fill_color": (0, 0, 0),
+            "border_color": (0, 0, 0),
+            "border_width": 1
+        }
+
+    @pytest.mark.parametrize(
+        "x,y,radius,fill_color,border_color,border_width",
+        [
+            # blank rectangle
+            (-1, 0, 200, None, (0, 0, 0), 0),
+            # x
+            (-1, 0, 200, (0, 0, 0), (0, 0, 0), 1),
+            (5000, 0, 200, (0, 0, 0), (0, 0, 0), 1),
+            ("a", 0, 200, (0, 0, 0), (0, 0, 0), 1),
+            (None, 0, 200, (0, 0, 0), (0, 0, 0), 1),
+            ("", 0, 200, (0, 0, 0), (0, 0, 0), 1),
+            # y
+            (0, -1, 200, (0, 0, 0), (0, 0, 0), 1),
+            (0, 5000, 200, (0, 0, 0), (0, 0, 0), 1),
+            (0, "a", 200, (0, 0, 0), (0, 0, 0), 1),
+            (0, None, 200, (0, 0, 0), (0, 0, 0), 1),
+            (0, "", 200, (0, 0, 0), (0, 0, 0), 1),
+            # radius
+            (0, 0, -1, (0, 0, 0), (0, 0, 0), 1),
+            (0, 0, "a", (0, 0, 0), (0, 0, 0), 1),
+            (0, 0, None, (0, 0, 0), (0, 0, 0), 1),
+            (0, 0, "", (0, 0, 0), (0, 0, 0), 1),
+            # fill_color
+            (0, 0, 200, (-1, -1, -1), (0, 0, 0), 1),
+            (0, 0, 200, (256, 256, 256), (0, 0, 0), 1),
+            (0, 0, 200, ("a", "b", "c"), (0, 0, 0), 1),
+            # border_color
+            (0, 0, 200, (0, 0, 0), (-1, -1, -1), 1),
+            (0, 0, 200, (0, 0, 0), (256, 256, 256), 1),
+            (0, 0, 200, (0, 0, 0), ("a", "b", "c"), 1),
+            # border_width
+            (0, 0, 200, (0, 0, 0), (0, 0, 0), -1),
+            (0, 0, 200, (0, 0, 0), (0, 0, 0), "a"),
+        ])
+    def test_draw_circle_error(self, x, y, radius, fill_color, border_color,
+                               border_width):
+        document = self.new_document()
+        with pytest.raises(RuntimeError):
+            document.draw_circle(x, y, radius, fill_color, border_color,
+                                 border_width)
+
 
 class TestMarkers:
     def new_document(self):
@@ -395,8 +449,9 @@ class TestValidators:
     ])
     def test_validate_color(self, color):
         document = self.new_document()
-        assert document._validate_color(color) == (int(color[0]), int(
-            color[1]), int(color[2]))
+        assert document._validate_color(color) == (int(color[0]),
+                                                   int(color[1]),
+                                                   int(color[2]))
 
     @pytest.mark.parametrize("color", [
         (("a", 10, 10)),
