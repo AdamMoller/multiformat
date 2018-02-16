@@ -515,6 +515,19 @@ class Document:
             _error("Invalid RGB color code blue value: {}".format(b))
         return (r, g, b)
 
+    def _hex_to_rgb(self, color):
+        # Convert #RGB, RGB, #RRGGBB, RRGGBB to rgb() colors.
+        color = color.strip().strip("#")
+        length = len(color)
+        f = int(length / 3)
+        if length == 3 or length == 6:
+            return tuple(
+                int(color[i:i + f] * int(2 / f), 16)
+                for i in range(0, length, f))
+        else:
+            _error("Color '{}' is not in #RRGGBB or #RGB format".format(color),
+                   "ValueError")
+
 
 def _error(statement, error_type=""):
     # Used to trigger exceptions with customized statements
