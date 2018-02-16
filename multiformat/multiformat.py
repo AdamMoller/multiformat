@@ -103,7 +103,7 @@ class Document:
             alignment: "left", "right", "middle" (String)
             font: TTF file name without extension (String)
             size: Font size in hundredths of a centimeter (Integer)
-            color: RGB color code (Tuple)
+            color: Hexadecimal or RGB color code (String or 3-Tuple)
 
         Returns:
             None
@@ -138,7 +138,7 @@ class Document:
             x1: x-axis end of the line. (Integer)
             y1: y-axis end of the line (Integer)
             width: Width of the line. (Integer)
-            color: RGB color of the line. (Tuple)
+            color: Hexadecimal or RGB color code (String or 3-Tuple)
 
         Returns:
             None
@@ -170,8 +170,8 @@ class Document:
             y: y-axis left of the rectangle (Integer)
             w: Width of the rectangle. (Integer)
             h: Height of the rectangle. (Integer)
-            fill_color: RGB color of the interior (Tuple)
-            border_color: RGB color of the border (Tuple)
+            fill_color: Hexadecimal or RGB color code (String or 3-Tuple)
+            border_color: Hexadecimal or RGB color code (String or 3-Tuple)
             border_width: Width of the border. Set at 0 for no border (Integer)
 
         Returns:
@@ -219,8 +219,8 @@ class Document:
             x: x-axis center of the circle. (Integer)
             y: y-axis center of the circle. (Integer)
             radius: Radius of the circle. (Integer)
-            fill_color: RGB color of the interior (Tuple)
-            border_color: RGB color of the border (Tuple)
+            fill_color: Hexadecimal or RGB color code (String or 3-Tuple)
+            border_color: Hexadecimal or RGB color code (String or 3-Tuple)
             border_width: Width of the border. Set at 0 for no border (Integer)
 
         Returns:
