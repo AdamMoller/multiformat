@@ -447,24 +447,43 @@ class TestValidators:
         document = self.new_document()
         assert document._validate_string(string) == string
 
-    @pytest.mark.parametrize("color", [
-        ((10, 10, 10)),
-        (("100", "100", "100")),
+    @pytest.mark.parametrize("color,output", [
+        ((10, 10, 10), (10, 10, 10)),
+        (("100", "100", "100"), (100, 100, 100)),
+        ("000", (0, 0, 0)),
+        ("#000", (0, 0, 0)),
+        ("000000", (0, 0, 0)),
+        ("#000000", (0, 0, 0)),
+        ("FFF", (255, 255, 255)),
+        ("#FFF", (255, 255, 255)),
+        ("FFFFFF", (255, 255, 255)),
+        ("#FFFFFF", (255, 255, 255)),
+        ("87CEFA", (135, 206, 250)),
+        ("8B4513", (139, 69, 19)),
+        ("708090", (112, 128, 144)),
     ])
-    def test_validate_color(self, color):
+    def test_validate_color(self, color, output):
         document = self.new_document()
-        assert document._validate_color(color) == (int(color[0]),
-                                                   int(color[1]),
-                                                   int(color[2]))
+        assert document._validate_color(color) == output
 
-    @pytest.mark.parametrize("color", [
-        (("a", 10, 10)),
-        (("100", "b", "100")),
-        (("100", None, "100")),
-        (("100", "100", -1)),
-        (("100", "300", "-1")),
+    @pytest.mark.parametrize("color,error", [
+        (("a", 10, 10), RuntimeError),
+        (("100", "b", "100"), RuntimeError),
+        (("100", None, "100"), RuntimeError),
+        (("100", "100", -1), RuntimeError),
+        (("100", "300", "-1"), RuntimeError),
+        ("F", ValueError),
+        ("#F", ValueError),
+        ("FF", ValueError),
+        ("#FF", ValueError),
+        ("FFFF", ValueError),
+        ("#FFFF", ValueError),
+        ("FFFFF", ValueError),
+        ("#FFFFF", ValueError),
+        ("FFFFFFF", ValueError),
+        ("#FFFFFFF", ValueError),
     ])
-    def test_validate_color_error(self, color):
+    def test_validate_color_error(self, color, error):
         document = self.new_document()
-        with pytest.raises(RuntimeError):
+        with pytest.raises(error):
             document._validate_color(color)
