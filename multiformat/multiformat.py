@@ -498,6 +498,9 @@ class Document:
         return str(string)
 
     def _validate_color(self, color, required=True):
+        # Convert hexadecimal color if not 3 tuple.
+        if isinstance(color, str):
+            return self._hex_to_rgb(color)
         # Confirm RGB colors are tuples of 3 integers 0 to 255.
         if not color and required is False:
             return None
@@ -515,10 +518,25 @@ class Document:
             _error("Invalid RGB color code blue value: {}".format(b))
         return (r, g, b)
 
+    def _hex_to_rgb(self, color):
+        # Convert #RGB, RGB, #RRGGBB, RRGGBB to rgb() colors.
+        color = color.strip().strip("#")
+        length = len(color)
+        f = int(length / 3)
+        if length == 3 or length == 6:
+            return tuple(
+                int(color[i:i + f] * int(2 / f), 16)
+                for i in range(0, length, f))
+        else:
+            _error("Color '{}' is not in #RRGGBB or #RGB format".format(color),
+                   "ValueError")
+
 
 def _error(statement, error_type=""):
     # Used to trigger exceptions with customized statements
     if error_type == "KeyError":
         raise KeyError(statement)
+    elif error_type == "ValueError":
+        raise ValueError(statement)
     else:
         raise RuntimeError(statement)
