@@ -148,6 +148,16 @@ PDF will be saved to the current directory if a file-like object is not assigned
 - file_name: name of the pdf file, without extension. (String)
 - file_object: optional file-like object to write to
 
+## Colors
+Page element methods currently support decimal RGB colors as a 3-Tuple and hexadecimal colors as strings.
+
+Here are some examples of acceptable color formats for the color white:
+- "FFF"
+- "#FFF"
+- "FFFFFF"
+- "#FFFFFF"
+- (255,255,255)
+
 ## Fonts
 Multiformat supports TrueType fonts (TTF). The following open source fonts are included in the package:
 - OpenSans-Bold
