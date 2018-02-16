@@ -498,6 +498,9 @@ class Document:
         return str(string)
 
     def _validate_color(self, color, required=True):
+        # Convert hexadecimal color if not 3 tuple.
+        if isinstance(color, str):
+            return self._hex_to_rgb(color)
         # Confirm RGB colors are tuples of 3 integers 0 to 255.
         if not color and required is False:
             return None
