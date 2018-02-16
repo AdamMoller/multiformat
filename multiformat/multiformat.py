@@ -520,5 +520,7 @@ def _error(statement, error_type=""):
     # Used to trigger exceptions with customized statements
     if error_type == "KeyError":
         raise KeyError(statement)
+    elif error_type == "ValueError":
+        raise ValueError(statement)
     else:
         raise RuntimeError(statement)
