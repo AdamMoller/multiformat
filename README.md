@@ -176,3 +176,15 @@ Additional fonts can be added by placing the font's TTF file in the "fonts" dire
 - Times-BoldItalic
 - Times-Italic
 - Times-Roman
+
+## Testing
+The pytest framework is used for testing and the pytest-cov plugin can be used for generating coverage reports.
+
+Test Multiformat:
+```
+pytest
+```
+Test Multiformat with coverage report:
+```
+pytest --cov-report term-missing --cov=multiformat
+```
