@@ -80,14 +80,38 @@ class Document:
 
     @property
     def pages(self):
+        """Get pages in the document.
+
+        Args:
+            None
+
+        Returns:
+            Pages in the document.
+        """
         return self._pages
 
     @property
     def w(self):
+        """Get width of the document.
+
+        Args:
+            None
+
+        Returns:
+            Width of the document.
+        """
         return self._w
 
     @property
     def h(self):
+        """Get height of the document.
+
+        Args:
+            None
+
+        Returns:
+            Height of the document.
+        """
         return self._h
 
     def draw_string(self, string, x, y, alignment, font, size, color):
@@ -461,8 +485,8 @@ class Document:
         # Confirm font name is valid.
         font = str(font)
         try:
-            index = [x.lower()
-                     for x in self.supported_fonts].index(font.lower())
+            index = [x.lower() for x in self.supported_fonts].index(
+                font.lower())
             return self.supported_fonts[index]
         except:
             _error(
