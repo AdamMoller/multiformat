@@ -1,5 +1,5 @@
 import pytest
-from multiformat.multiformat import Document
+from context import Document
 
 
 class TestValidators:
@@ -83,9 +83,7 @@ class TestValidators:
         document = self.new_document()
         assert document._validate_size(size) == int(size)
 
-    @pytest.mark.parametrize("string", [
-        ("test string"),
-    ])
+    @pytest.mark.parametrize("string", [("test string"), ])
     def test_validate_string(self, string):
         document = self.new_document()
         assert document._validate_string(string) == string

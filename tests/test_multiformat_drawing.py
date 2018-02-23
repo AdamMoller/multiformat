@@ -1,5 +1,5 @@
 import pytest
-from multiformat.multiformat import Document
+from context import Document
 
 
 class TestDrawing:

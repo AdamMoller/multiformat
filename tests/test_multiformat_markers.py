@@ -1,5 +1,5 @@
 import pytest
-from multiformat.multiformat import Document
+from context import Document
 
 
 class TestMarkers:
@@ -10,6 +10,4 @@ class TestMarkers:
         document = self.new_document()
         document.draw_rectangle(0, 0, 200, 200, (0, 0, 0), (0, 0, 0), 1)
         document.insert_page_break()
-        assert document._document[-1] == {
-            "type": "page_break",
-        }
+        assert document._document[-1] == {"type": "page_break", }

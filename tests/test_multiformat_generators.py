@@ -1,7 +1,7 @@
 import pytest
 from io import BytesIO
 from filecmp import cmp
-from multiformat.multiformat import Document
+from context import Document
 
 
 class TestGenerators:
