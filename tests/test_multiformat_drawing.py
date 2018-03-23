@@ -3,14 +3,13 @@ from context import Document
 
 
 class TestDrawing:
-    def new_document(self):
-        return Document("letter", "portrait")
+    def setup_method(self, method):
+        self.document = Document("letter", "portrait")
 
     def test_draw_string(self):
-        document = self.new_document()
-        document.draw_string("Test", 0, 100, "left", "OpenSans-Regular", 12,
-                             (0, 0, 0))
-        assert document._document[-1] == {
+        self.document.draw_string("Test", 0, 100, "left", "OpenSans-Regular",
+                                  12, (0, 0, 0))
+        assert self.document._document[-1] == {
             "type": "string",
             "string": "Test",
             "x": 0,
@@ -55,14 +54,13 @@ class TestDrawing:
         ])
     def test_draw_string_error(self, string, x, y, alignment, font, size,
                                color):
-        document = self.new_document()
         with pytest.raises(RuntimeError):
-            document.draw_string(string, x, y, alignment, font, size, color)
+            self.document.draw_string(string, x, y, alignment, font, size,
+                                      color)
 
     def test_draw_rectangle(self):
-        document = self.new_document()
-        document.draw_rectangle(0, 0, 200, 200, (0, 0, 0), (0, 0, 0), 1)
-        assert document._document[-1] == {
+        self.document.draw_rectangle(0, 0, 200, 200, (0, 0, 0), (0, 0, 0), 1)
+        assert self.document._document[-1] == {
             "type": "rectangle",
             "x": 0,
             "y": 0,
@@ -116,15 +114,13 @@ class TestDrawing:
         ])
     def test_draw_rectangle_error(self, x, y, w, h, fill_color, border_color,
                                   border_width):
-        document = self.new_document()
         with pytest.raises(RuntimeError):
-            document.draw_rectangle(x, y, w, h, fill_color, border_color,
-                                    border_width)
+            self.document.draw_rectangle(x, y, w, h, fill_color, border_color,
+                                         border_width)
 
     def test_draw_line(self):
-        document = self.new_document()
-        document.draw_line(0, 0, 100, 100, 2, (0, 0, 0))
-        assert document._document[-1] == {
+        self.document.draw_line(0, 0, 100, 100, 2, (0, 0, 0))
+        assert self.document._document[-1] == {
             "type": "line",
             "x": 0,
             "y": 0,
@@ -170,14 +166,12 @@ class TestDrawing:
             (0, 0, 100, 100, 2, (256, 256, 256)),
         ])
     def test_draw_line_error(self, x, y, x1, y1, width, color):
-        document = self.new_document()
         with pytest.raises(RuntimeError):
-            document.draw_line(x, y, x1, y1, width, color)
+            self.document.draw_line(x, y, x1, y1, width, color)
 
     def test_draw_circle(self):
-        document = self.new_document()
-        document.draw_circle(0, 0, 200, (0, 0, 0), (0, 0, 0), 1)
-        assert document._document[-1] == {
+        self.document.draw_circle(0, 0, 200, (0, 0, 0), (0, 0, 0), 1)
+        assert self.document._document[-1] == {
             "type": "circle",
             "x": 0,
             "y": 0,
@@ -223,7 +217,6 @@ class TestDrawing:
         ])
     def test_draw_circle_error(self, x, y, radius, fill_color, border_color,
                                border_width):
-        document = self.new_document()
         with pytest.raises(RuntimeError):
-            document.draw_circle(x, y, radius, fill_color, border_color,
-                                 border_width)
+            self.document.draw_circle(x, y, radius, fill_color, border_color,
+                                      border_width)
